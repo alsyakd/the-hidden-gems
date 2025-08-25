@@ -9,6 +9,16 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+
+    public function guest()
+    {
+        $posts = Post::with('category')
+                    ->published()
+                    ->latest()
+                    ->paginate(10);
+        return view('home', compact('posts'));
+    }
+
     public function index()
     {
         $posts = Post::with('category')

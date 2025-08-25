@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->default('temp-slug'); // Tambahkan default
             $table->text('content');
             $table->text('excerpt')->nullable();
             $table->string('author_name');
