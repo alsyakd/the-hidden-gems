@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 class PostController extends Controller
 {
 
-    public function guest()
+    public function home()
     {
         $posts = Post::with('category')
                     ->published()

@@ -6,11 +6,11 @@
 <div class="max-w-6xl mx-auto">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Semua Artikel</h1>
-        @if(in_array(session('user_role'), ['author', 'admin']))
+        {{-- @if(in_array(session('user_role'), ['author', 'admin'])) --}}
         <a href="{{ route('posts.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             + Artikel Baru
         </a>
-        @endif
+        {{-- @endif --}}
     </div>
 
     @if($posts->isEmpty())
