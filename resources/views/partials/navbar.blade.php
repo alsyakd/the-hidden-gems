@@ -1,24 +1,19 @@
-<nav class="bg-blue-600 text-white shadow-lg">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <a href="{{ route('home') }}" class="text-xl font-bold">The Hidden Gems</a>
-                <div class="flex space-x-4 items-center">
-                    <a href="{{ route('home') }}" class="hover:underline">Beranda</a>
-                    <a href="{{ route('posts.index') }}" class="hover:underline">Artikel</a>
-
-                    @if(in_array(session('user_role', 'guest'), ['author', 'admin']))
-                        <a href="{{ route('posts.create') }}" class="hover:underline">Tulis Artikel</a>
-                    @endif
-
-                    @if(session('user_role') === 'admin')
-                        <a href="{{ route('categories.index') }}" class="hover:underline">Kategori</a>
-                    @endif
-
-                    <div class="flex items-center space-x-2">
-                        <span class="text-sm">Role: {{ session('user_name', 'Pengunjung') }}</span>
-                        <a href="{{ route('session.select') }}" class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">Ubah Role</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+<nav class="bg-white border-b sticky top-0 z-10">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="{{ route('home') }}" class="font-bold text-lg">MyBlog</a>
+      <div class="flex items-center gap-3">
+        <a href="{{ route('categories.list') }}" class="hover:underline">Kategori</a>
+        @auth
+          <a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a>
+          <form action="{{ route('logout') }}" method="POST" class="inline">
+            @method('GET')
+            @csrf
+            <button class="px-3 py-1 rounded bg-gray-800 text-white">Logout</button>
+          </form>
+        @else
+          <a href="{{ route('login') }}" class="px-3 py-1 rounded bg-gray-800 text-white">Login</a>
+          <a href="{{ route('register') }}" class="px-3 py-1 rounded border">Register</a>
+        @endauth
+      </div>
+    </div>
+  </nav>

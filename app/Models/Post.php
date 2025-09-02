@@ -11,16 +11,15 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
+        'category_id',
+        'author_id',
         'title',
         'slug',
         'content',
         'excerpt',
-        'author_name',
-        'author_role',
         'featured_image',
         'published',
         'published_at',
-        'category_id',
     ];
 
     protected $casts = [
@@ -32,6 +31,15 @@ class Post extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    // Relasi: Post milik 1 Author
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
+
+    // Route model binding pakai slug
+    public function getRouteKeyName() { return 'slug'; }
 
     public function scopePublished($query)
     {

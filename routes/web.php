@@ -1,25 +1,42 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SessionController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
-// Session routes
-Route::get('/session/select', [SessionController::class, 'selectRole'])->name('session.select');
-Route::post('/session/set', [SessionController::class, 'setRole'])->name('session.set');
+// Auth
+Route::get('/login', [LoginController::class,'show'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class,'login'])->name('login.attempt')->middleware('guest');
+Route::get('/logout', [LoginController::class,'logout'])->name('logout')->middleware('auth');
 
-// Admin only routes
-Route::middleware(['role:admin'])->group(function () {
-    Route::resource('categories', CategoryController::class)->except(['show']);
+Route::get('/register', [RegisterController::class,'show'])->name('register')->middleware('guest');
+Route::post('/register', [RegisterController::class,'register'])->name('register.store')->middleware('guest');
+
+// Dashboard (auth)
+Route::get('/dashboard', DashboardController::class)->name('dashboard')->middleware('auth');
+
+// Posts CRUD (auth)
+Route::middleware('auth')->group(function () {
+    Route::resource('posts', PostController::class);
+    // Route::post('/posts', [PostController::class,'store'])->name('posts.store');
+    // Route::get('/posts/{post:slug}/edit', [PostController::class,'edit'])->name('posts.edit');
+    // Route::put('/posts/{post:slug}', [PostController::class,'update'])->name('posts.update');
+    // Route::delete('/posts/{post:slug}', [PostController::class,'destroy'])->name('posts.destroy');
+    // Route::get('/posts/create', [PostController::class,'create'])->name('posts.create');
 });
 
-// Author and Admin routes
-Route::middleware(['role:author,admin'])->group(function () {
-    Route::resource('posts', PostController::class)->except(['create', 'index', 'show']);
+// Admin only (contoh tambah kategori)
+Route::middleware(['auth','role:admin'])->group(function () {
+    Route::get('/categories/create', [CategoryController::class,'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class,'store'])->name('categories.store');
 });
 
-// Public routes
-Route::get('/', [PostController::class, 'home'])->name('home');
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show'); // Tetap di bawah
+// Home (publik)
+Route::get('/', [PostController::class,'index'])->name('home');
+Route::get('/posts/{post:slug}', [PostController::class,'show'])->name('posts.show');
+
+// Kategori (publik + admin tambah)
+Route::get('/categories', [CategoryController::class,'list'])->name('categories.list');

@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('author_id')->constrained('authors')->cascadeOnDelete(); // perbaikan FK yang benar
             $table->string('title');
-            $table->string('slug')->unique()->default('temp-slug'); // Tambahkan default
-            $table->text('content');
+            $table->string('slug')->unique();
+            $table->longText('content');
             $table->text('excerpt')->nullable();
-            $table->string('author_name');
-            $table->string('author_role')->default('author');
             $table->string('featured_image')->nullable();
             $table->boolean('published')->default(false);
             $table->timestamp('published_at')->nullable();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

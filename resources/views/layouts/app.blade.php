@@ -1,30 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Hidden Gems - @yield('title')</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ $title ?? 'Blog' }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50 text-gray-800">
+
     @include('partials.navbar')
 
-    <main class="container mx-auto px-4 py-8">
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                {{ session('success') }}
+            <div class="max-w-5xl mx-auto mt-4 px-4">
+            <div class="p-3 rounded bg-green-100 text-green-800">{{ session('success') }}</div>
             </div>
         @endif
 
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                {{ session('error') }}
-            </div>
-        @endif
+        <main class="max-w-5xl mx-auto px-4 py-6">
+            @yield('content')
+        </main>
 
-        @yield('content')
-    </main>
-
-    @include('partials.footer')
+   @include('partials.footer')
 </body>
 </html>
