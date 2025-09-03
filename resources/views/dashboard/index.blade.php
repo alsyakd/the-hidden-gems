@@ -4,7 +4,15 @@
 
 <p class="mb-4">Hai, <strong>{{ $user->name }}</strong> ({{ $user->role }})</p>
 
-<a href="{{ route('posts.create') }}" class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded">Tulis Post</a>
+@auth
+  @if($user->isAdmin())
+    <p class="mb-4">Sebagai admin, kamu bisa mengelola kategori dan semua post.</p>
+  @else
+    <p class="mb-4">Sebagai author, kamu bisa menulis dan mengelola postmu sendiri.</p>
+    <a href="{{ route('posts.create') }}" class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded">Tulis Post</a>
+  @endif
+@endauth
+
 
 @if($posts->count())
   <div class="overflow-x-auto bg-white border rounded">
