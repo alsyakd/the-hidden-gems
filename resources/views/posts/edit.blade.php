@@ -1,76 +1,36 @@
 @extends('layouts.app')
-
-@section('title', 'Edit Artikel')
-
 @section('content')
-<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Artikel</h1>
-
-    <form action="{{ route('posts.update', $post) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <div class="mb-4">
-            <label for="title" class="block text-gray-700 mb-2">Judul Artikel</label>
-            <input type="text" name="title" id="title" required
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                   value="{{ old('title', $post->title) }}">
-            @error('title')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="category_id" class="block text-gray-700 mb-2">Kategori</label>
-            <select name="category_id" id="category_id" required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="">Pilih Kategori</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
-            @error('category_id')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="excerpt" class="block text-gray-700 mb-2">Kutipan (opsional)</label>
-            <textarea name="excerpt" id="excerpt" rows="3"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ old('excerpt', $post->excerpt) }}</textarea>
-            @error('excerpt')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="content" class="block text-gray-700 mb-2">Konten</label>
-            <textarea name="content" id="content" rows="10" required
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ old('content', $post->content) }}</textarea>
-            @error('content')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label class="flex items-center">
-                <input type="checkbox" name="published" value="1"
-                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500"
-                       {{ old('published', $post->published) ? 'checked' : '' }}>
-                <span class="ml-2 text-gray-700">Publikasikan artikel</span>
-            </label>
-        </div>
-
-        <div class="flex justify-between items-center">
-            <a href="{{ route('posts.show', $post) }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                Batal
-            </a>
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                Update Artikel
-            </button>
-        </div>
-    </form>
-</div>
+<h1 class="text-2xl font-semibold mb-4">Edit Post</h1>
+<form action="{{ route('posts.update',$post) }}" method="POST" enctype="multipart/form-data" class="space-y-4 max-w-2xl">
+  @csrf @method('PUT')
+  <div>
+    <label class="block mb-1">Judul</label>
+    <input name="title" value="{{ old('title',$post->title) }}" class="w-full border rounded p-2">
+    @error('title') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+  </div>
+  <div>
+    <label class="block mb-1">Kategori</label>
+    <select name="category_id" class="w-full border rounded p-2">
+      @foreach($categories as $c)
+        <option value="{{ $c->id }}" @selected(old('category_id',$post->category_id)==$c->id)>{{ $c->name }}</option>
+      @endforeach
+    </select>
+  </div>
+  <div>
+    <label class="block mb-1">Konten</label>
+    <textarea name="content" rows="8" class="w-full border rounded p-2">{{ old('content',$post->content) }}</textarea>
+  </div>
+  <div>
+    <label class="block mb-1">Featured Image (opsional ganti)</label>
+    <input type="file" name="featured_image" class="w-full">
+  </div>
+  <label class="inline-flex items-center gap-2">
+    <input type="checkbox" name="published" value="1" {{ old('published',$post->published)?'checked':'' }}>
+    <span>Published</span>
+  </label>
+  <div class="flex gap-2">
+    <button class="px-4 py-2 bg-gray-800 text-white rounded">Update</button>
+    <a href="{{ route('dashboard') }}" class="px-4 py-2 border rounded">Kembali</a>
+  </div>
+</form>
 @endsection

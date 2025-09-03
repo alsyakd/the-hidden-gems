@@ -9,58 +9,21 @@ use Illuminate\Support\Str;
 class CategoryController extends Controller
 {
 
-    public function index()
-    {
-        $categories = Category::withCount('posts')->get();
-        return view('categories.index', compact('categories'));
+    public function list() {
+        $categories = Category::withCount(['posts' => fn($q)=>$q->where('published',true)])
+            ->orderBy('name')->get();
+        return view('categories.list', compact('categories'));
     }
 
-    public function create()
-    {
-        return view('categories.create');
-    }
+    // contoh minimal untuk admin add kategori
+    public function create() { return view('categories.create'); }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|max:255|unique:categories',
-            'description' => 'nullable',
-        ]);
+    public function store(Request $request) {
+        $data = $request->validate(['name'=>['required','max:255']]);
+        $slug = Str::slug($data['name']);
+        if (Category::where('slug',$slug)->exists()) $slug .= '-' . Str::random(5);
 
-        $validated['slug'] = Str::slug($request->name);
-
-        Category::create($validated);
-
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
-    }
-
-    public function edit(Category $category)
-    {
-        return view('categories.edit', compact('category'));
-    }
-
-    public function update(Request $request, Category $category)
-    {
-        $validated = $request->validate([
-            'name' => 'required|max:255|unique:categories,name,' . $category->id,
-            'description' => 'nullable',
-        ]);
-
-        $validated['slug'] = Str::slug($request->name);
-
-        $category->update($validated);
-
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
-    }
-
-    public function destroy(Category $category)
-    {
-        if ($category->posts()->count() > 0) {
-            return redirect()->route('categories.index')->with('error', 'Cannot delete category with posts.');
-        }
-
-        $category->delete();
-
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+        Category::create(['name'=>$data['name'],'slug'=>$slug]);
+        return redirect()->route('categories.list')->with('success','Kategori ditambah.');
     }
 }
