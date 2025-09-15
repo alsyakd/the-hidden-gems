@@ -4,22 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ $title ?? 'Blog' }}</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 text-gray-800">
 
-    @include('partials.navbar')
+  {{-- Navbar --}}
+  @include('partials.navbar')
 
-        @if(session('success'))
-            <div class="max-w-5xl mx-auto mt-4 px-4">
-            <div class="p-3 rounded bg-green-100 text-green-800">{{ session('success') }}</div>
-            </div>
-        @endif
+  {{-- Flash message --}}
+  @if(session('success'))
+    <div class="max-w-4xl mx-auto mt-6 px-4">
+      <div class="p-4 rounded-lg bg-green-100/80 text-green-800 shadow-md border-l-4 border-green-500 animate-pulse">
+        ✅ {{ session('success') }}
+      </div>
+    </div>
+  @endif
 
-        <main class="max-w-5xl mx-auto px-4 py-6">
-            @yield('content')
-        </main>
+  {{-- Main content --}}
+  <main class="flex-grow flex items-start justify-center px-2 py-14">
+    <div
+      class="w-full max-w-3xl bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/50
+             p-8 transform transition duration-300 hover:scale-[1.02] hover:shadow-2xl">
+      @yield('content')
+    </div>
+  </main>
 
-   @include('partials.footer')
+  {{-- Footer --}}
+  @include('partials.footer')
+
 </body>
 </html>

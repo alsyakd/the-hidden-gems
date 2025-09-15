@@ -3,40 +3,54 @@
 @section('title', 'Edit Kategori')
 
 @section('content')
-<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Kategori</h1>
+<div class="w-full max-w-xs mx-auto">
+  {{-- Judul --}}
+  <h1 class="text-lg font-extrabold mb-5 text-center
+             bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500
+             bg-clip-text text-transparent">
+    Edit Kategori
+  </h1>
 
-    <form action="{{ route('categories.update', $category) }}" method="POST">
-        @csrf
-        @method('PUT')
+  {{-- Form --}}
+  <form action="{{ route('categories.update', $category) }}" method="POST" class="space-y-4">
+    @csrf
+    @method('PUT')
 
-        <div class="mb-4">
-            <label for="name" class="block text-gray-700 mb-2">Nama Kategori</label>
-            <input type="text" name="name" id="name" required
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                   value="{{ old('name', $category->name) }}">
-            @error('name')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+    {{-- Nama Kategori --}}
+    <div>
+      <label for="name" class="block mb-1 text-sm font-medium text-gray-700">Nama Kategori</label>
+      <input type="text" name="name" id="name" required
+             class="w-full px-3 py-2 rounded-md border border-gray-300
+                    focus:ring-2 focus:ring-pink-400 focus:outline-none text-sm"
+             value="{{ old('name', $category->name) }}">
+      @error('name')
+        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+      @enderror
+    </div>
 
-        <div class="mb-4">
-            <label for="description" class="block text-gray-700 mb-2">Deskripsi (opsional)</label>
-            <textarea name="description" id="description" rows="3"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ old('description', $category->description) }}</textarea>
-            @error('description')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+    {{-- Deskripsi --}}
+    <div>
+      <label for="description" class="block mb-1 text-sm font-medium text-gray-700">Deskripsi (opsional)</label>
+      <textarea name="description" id="description" rows="3"
+                class="w-full px-3 py-2 rounded-md border border-gray-300
+                       focus:ring-2 focus:ring-pink-400 focus:outline-none text-sm">{{ old('description', $category->description) }}</textarea>
+      @error('description')
+        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+      @enderror
+    </div>
 
-        <div class="flex justify-between items-center">
-            <a href="{{ route('categories.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                Batal
-            </a>
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                Update Kategori
-            </button>
-        </div>
-    </form>
+    {{-- Aksi --}}
+    <div class="flex justify-between items-center">
+      <a href="{{ route('categories.index') }}"
+         class="px-4 py-2 rounded-md bg-gray-400 text-white hover:bg-gray-500 transition">
+        Batal
+      </a>
+      <button type="submit"
+              class="px-4 py-2 rounded-md bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500
+                     text-white font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] transition transform">
+        Update Kategori
+      </button>
+    </div>
+  </form>
 </div>
 @endsection
